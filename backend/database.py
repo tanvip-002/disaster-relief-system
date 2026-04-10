@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(dotenv_path=dotenv_path)
 
-DATABASE_URL = os.getenv("postgresql://postgres:alienx@localhost:5432/disaster_db")
+DATABASE_URL = os.getenv("postgresql://postgres:964.897@localhost:5432/disaster_db")
 
 engine = create_engine(DATABASE_URL)
 

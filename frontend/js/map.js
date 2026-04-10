@@ -1,7 +1,3 @@
-// ─────────────────────────────────────────────────────────
-// RELIEFOPS — MAP & NOTIFICATION FRONTEND LOGIC
-// Backend: FastAPI at http://127.0.0.1:8000
-// ─────────────────────────────────────────────────────────
 
 const API = "http://127.0.0.1:8000";
 
@@ -24,7 +20,6 @@ function toggleTheme() {
   document.getElementById("themeLbl").textContent = next.toUpperCase();
   localStorage.setItem("theme", next);
 
-  // Re-apply tile filter when theme changes
   if (window._map) {
     const tiles = document.querySelectorAll(".leaflet-tile");
     tiles.forEach(t => {
@@ -80,13 +75,11 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   maxZoom: 19
 }).addTo(map);
 
-// Show coordinates on hover
 map.on("mousemove", e => {
   document.getElementById("coordBar").textContent =
     `${e.latlng.lat.toFixed(5)},  ${e.latlng.lng.toFixed(5)}`;
 });
 
-// Clicking map fills lat/lon inputs
 map.on("click", e => {
   document.getElementById("iLat").value = e.latlng.lat.toFixed(6);
   document.getElementById("iLon").value = e.latlng.lng.toFixed(6);
@@ -283,7 +276,7 @@ function updateStats(locs, nearbyCount) {
   document.getElementById("sHospitals").textContent= locs.filter(l => l.type === "hospital").length;
 }
 
-// ── ADD LOCATION ──
+// ──  LOCATION ──
 function openAddModal()  { document.getElementById("addModal").classList.add("open"); }
 function closeAddModal() { document.getElementById("addModal").classList.remove("open"); }
 
@@ -367,7 +360,7 @@ async function markRead(id, el) {
     });
     el.classList.remove("unread");
     loadNotifications();
-  } catch { /* silent */ }
+  } catch { }
 }
 
 function updateBadge(n) {
@@ -376,7 +369,6 @@ function updateBadge(n) {
   else { b.style.display = "none"; }
 }
 
-// ── TOAST ──
 function toast(msg, type = "info") {
   const stack = document.getElementById("toasts");
   const el = document.createElement("div");
@@ -386,17 +378,13 @@ function toast(msg, type = "info") {
   setTimeout(() => { el.style.opacity = "0"; setTimeout(() => el.remove(), 300); }, 3000);
 }
 
-// ── INIT ──
 document.addEventListener("DOMContentLoaded", () => {
-  // Restore saved theme
   const saved = localStorage.getItem("theme") || "dark";
   document.documentElement.setAttribute("data-theme", saved);
   document.getElementById("themeLbl").textContent = saved.toUpperCase();
 
-  // Check email consent
   checkConsent();
 
-  // Poll notifications every 30s
   setInterval(() => { if (getToken()) loadNotifications(); }, 30000);
 
   toast("🚨 ReliefOps Dashboard ready", "info");
